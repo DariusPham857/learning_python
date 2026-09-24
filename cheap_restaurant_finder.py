@@ -81,17 +81,49 @@ lowest_overall = None
 # Combine them all into a single list
 shops = [shop1, shop2, shop3, shop4, shop5, shop6]
 def find_food_lowest(shop) :
-    lowest_in_current_shop = None
+    lowest_food_in_current_shop = None
     for item in shop["menu"]:
-        if lowest_in_current_shop is None:
-            lowest_in_current_shop = item["price"]
-        if item["type"] == "food" and item["price"] < lowest_in_current_shop:
-            lowest_in_current_shop = item["price"]
-    return lowest_in_current_shop
+        if lowest_food_in_current_shop is None:
+            lowest_food_in_current_shop = item["price"]
+        if item["type"] == "food" and item["price"] < lowest_food_in_current_shop:
+            lowest_food_in_current_shop = item["price"]
+    return lowest_food_in_current_shop
 
-lowest_in_shop1 = find_food_lowest(shop1)
+def find_drink_lowest(shop) :
+    lowest_dink_in_current_shop = None
+    for item in shop["menu"]:
+        if lowest_dink_in_current_shop is None:
+            lowest_dink_in_current_shop = item["price"]
+        if item["type"] == "drink" and item["price"] < lowest_dink_in_current_shop:
+            lowest_dink_in_current_shop = item["price"]
+    return lowest_dink_in_current_shop
 
-if lowest_overall is None:
-    lowest_overall = lowest_in_shop1
-if lowest_in_shop1 < lowest_overall:
-    lowest_overall = lowest_in_shop1
+
+lowest_combo_per_shop = {
+    "shop1" : find_drink_lowest(shop1) + find_food_lowest(shop1),
+    "shop2": find_drink_lowest(shop2) + find_food_lowest(shop2),
+    "shop3" : find_drink_lowest(shop3) + find_food_lowest(shop3),
+    "shop4" : find_drink_lowest(shop4) + find_food_lowest(shop4),
+    "shop5" : find_drink_lowest(shop5) + find_food_lowest(shop5),
+    "shop6" : find_drink_lowest(shop6) + find_food_lowest(shop6)
+}
+
+
+
+def find_the_lowest(lowest_combo_per_shop):
+
+    # print(lowest_combo_per_shop)
+    
+    lowest_price = lowest_combo_per_shop["shop1"]
+    shop_with_lowest_price = None
+    for shop, price in lowest_combo_per_shop.items():
+        if price < lowest_price:
+            lowest_price = price
+            shop_with_lowest_price = shop
+
+        
+    return shop_with_lowest_price, lowest_price
+    
+
+print(find_the_lowest(lowest_combo_per_shop))
+
