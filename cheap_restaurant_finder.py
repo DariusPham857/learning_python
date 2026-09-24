@@ -94,19 +94,28 @@ def find_cheapest_item(shop, item_type):
     return cheapest_item
 
 
-lowest_combo_per_shop = {
-    "shop1" : find_drink_lowest(shop1) + find_food_lowest(shop1),
-    "shop2": find_drink_lowest(shop2) + find_food_lowest(shop2),
-    "shop3" : find_drink_lowest(shop3) + find_food_lowest(shop3),
-    "shop4" : find_drink_lowest(shop4) + find_food_lowest(shop4),
-    "shop5" : find_drink_lowest(shop5) + find_food_lowest(shop5),
-    "shop6" : find_drink_lowest(shop6) + find_food_lowest(shop6)
-}
+def get_lowest_combo_pershop(shops):
+    lowest_combo_per_shop = {}
+    for shop in shops:
+        lowest_combo_per_shop[shop["name"]] = find_drink_lowest(shop) + find_food_lowest(shop)
+    return lowest_combo_per_shop
 
 
+def filter_by_location(shops, locations):
+    allowed_shops = []
+    allowed_locations = [x.lower() for x in locations]
 
-def find_the_lowest(lowest_combo_per_shop):
-    lowest_price = lowest_combo_per_shop["shop1"]
+    for shop in shops:
+        if shop["location"].lower() in allowed_locations:
+            allowed_shops.append(shop)
+    return allowed_shops
+
+
+def find_the_lowest(shops, locations):
+    allowed_shops = filter_by_location(shops, locations)
+    lowest_combo_per_shop = get_lowest_combo_pershop(allowed_shops)
+
+    lowest_price = lowest_combo_per_shop[next(iter(lowest_combo_per_shop))]
     shop_with_lowest_price = None
     for shop, price in lowest_combo_per_shop.items():
         if price < lowest_price:
@@ -117,4 +126,8 @@ def find_the_lowest(lowest_combo_per_shop):
     return shop_with_lowest_price, lowest_price
     
 
-print(find_the_lowest(lowest_combo_per_shop))
+
+print(find_the_lowest(shops, ["thanh khe", "son TRA", "Lien Chieu"]))
+
+
+
