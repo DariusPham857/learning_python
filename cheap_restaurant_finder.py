@@ -2,12 +2,12 @@ shop1 = {
     "name": "Restaurant 1",
     "location": "Son Tra",
     "menu": [
+        {"name": "Water", "type": "drink", "price": 2000 },
         {"name": "Pizza Hai San", "type": "food", "price": 200000 },
         {"name": "Pizza Meat Lovers", "type": "food", "price": 210000 },
         {"name": "Pizza 4 cheese", "type": "food", "price": 220000 },
         {"name": "Pepsi", "type": "drink", "price": 15000 },
         {"name": "Coke", "type": "drink", "price": 15000 },
-        {"name": "Water", "type": "drink", "price": 15000 },
     ]
 }
 
@@ -81,22 +81,17 @@ lowest_overall = None
 # Combine them all into a single list
 shops = [shop1, shop2, shop3, shop4, shop5, shop6]
 def find_food_lowest(shop) :
-    lowest_food_in_current_shop = None
-    for item in shop["menu"]:
-        if lowest_food_in_current_shop is None:
-            lowest_food_in_current_shop = item["price"]
-        if item["type"] == "food" and item["price"] < lowest_food_in_current_shop:
-            lowest_food_in_current_shop = item["price"]
-    return lowest_food_in_current_shop
+    return find_cheapest_item(shop, "food")
 
 def find_drink_lowest(shop) :
-    lowest_dink_in_current_shop = None
+    return find_cheapest_item(shop, "drink")
+
+def find_cheapest_item(shop, item_type):
+    cheapest_item = None
     for item in shop["menu"]:
-        if lowest_dink_in_current_shop is None:
-            lowest_dink_in_current_shop = item["price"]
-        if item["type"] == "drink" and item["price"] < lowest_dink_in_current_shop:
-            lowest_dink_in_current_shop = item["price"]
-    return lowest_dink_in_current_shop
+        if  item["type"] == item_type and (cheapest_item is None or item["price"] < cheapest_item):
+            cheapest_item = item["price"]
+    return cheapest_item
 
 
 lowest_combo_per_shop = {
@@ -111,9 +106,6 @@ lowest_combo_per_shop = {
 
 
 def find_the_lowest(lowest_combo_per_shop):
-
-    # print(lowest_combo_per_shop)
-    
     lowest_price = lowest_combo_per_shop["shop1"]
     shop_with_lowest_price = None
     for shop, price in lowest_combo_per_shop.items():
@@ -126,4 +118,3 @@ def find_the_lowest(lowest_combo_per_shop):
     
 
 print(find_the_lowest(lowest_combo_per_shop))
-
